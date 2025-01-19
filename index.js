@@ -1,34 +1,16 @@
-const puppeteer = require("puppeteer");
+const axios = require("axios");
 
-const scrapeProfile = async (profileUrl) => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+const profileData = async (userName) => {
   try {
-    await page.goto(profileUrl, { waitUntil: "load", timeout: 0 });
-
-    const userInfo = await page.evaluate(() => {
-      const username =
-        document.querySelector(".profile-title")?.innerText || "N/A";
-      const codingScore =
-        document.querySelector(".score_card_value")?.innerText || "N/A";
-      const solvedProblems =
-        document.querySelector(".score_card_subtitle span")?.innerText || "N/A";
-      const rank =
-        document.querySelector(".rank_card_value")?.innerText || "N/A";
-
-      return {
-        username,
-        codingScore,
-        solvedProblems,
-        rank,
-      };
-    });
-    console.log(userInfo);
+    const profileData = await axios.get(
+      `https://authapi.geeksforgeeks.org/api-get/user-profile-info/?handle=${userName}&article_count=false&redirect=true`
+    );
+    return profileData.data;
   } catch (error) {
-    console.error("error while fetching data: " + error);
-  } finally {
-    await browser.close();
+    console.log("error while fetch data");
   }
 };
 
-scrapeProfile("https://auth.geeksforgeeks.org/user/siranjeevi0619/");
+profileData("siranjeevi0619").then((info) => {
+  console.log("Profile Information:", info.data);
+});
