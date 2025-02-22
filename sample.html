@@ -4,8 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>GFG Profile Fetcher</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -24,113 +29,153 @@
         .progress {
             background-color: #495057;
         }
+
+        .topic {
+            margin-bottom: 0.5rem;
+        }
+
+        .circular-progress {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(#dc3545, #343a40);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circular-progress::before {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #212529;
+        }
+
+        .circular-progress span {
+            position: relative;
+            color: #fff;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 
 <body>
     <div class="container mt-5">
-        <div class="row">
-            <!-- Left Profile Section -->
+        <h2>Enter GeeksforGeeks Username</h2>
+        <input type="text" id="username" placeholder="Enter username">
+        <button onclick="fetchProfile()">Fetch Profile</button>
+        <div class="row mt-4">
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <img src="https://media.geeksforgeeks.org/img-practice/user_web-1598433228.svg"
-                            alt="Profile Image" class="img-fluid rounded-circle mb-3"
-                            style="width: 150px; height: 150px;">
-                        <h3>Poovarasan</h3>
-                        <p class="text-muted">#poovarasan1310</p>
-                        <div class="d-flex justify-content-around">
-                            <a href="#" class="text-white"><i class="fab fa-github"></i></a>
-                            <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
-                            <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="text-white"><i class="fas fa-globe"></i></a>
+                <div class="card " style="width: 30rem;">
+                    <div class="card-body text-center">
+                        <div class="row">
+                            <div class="col-4">
+                                <img id="profileImage" src="holder.js/150x150?theme=dark&bg=%23333&fg=%23aaa&text=Profile"
+                                    alt="Profile Image" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                            </div>
+                            <div class="col-8 text-start d-flex flex-column justify-content-center">
+                                <p id="name" class="m-0 fs-4"></p>
+                                <div class="d-flex align-items-center m-0">
+                                    <i class="fas fa-trophy me-2"></i><span id="rank"></span>
+                                </div>
+                                <div class="d-flex align-items-center m-0">
+                                    <i class="fas fa-university me-2"></i><span id="college"></span>
+                                </div>
+
+                            </div>
                         </div>
+                        
+                        
+                        <!-- <p id="usernameDisplay" class="text-light"></p> -->
+                        
+                  
                         <hr>
-                        <p><i class="fas fa-envelope me-2"></i>poovarasan936161@gmail.com</p>
-                        <p><i class="fas fa-map-marker-alt me-2"></i>Coimbatore</p>
-                        <p><i class="fas fa-university me-2"></i>KARPAGAM COLLEGE OF ENGINEERING</p>
+                        <div class="row justify-content-center ">
+                            <div class="col-2 ">
+                                <div class="row"><span id="score"></span></div>
+                                <div class="row">Score</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row"><span id="score"></span></div>
+                                <div class="row">Total Problem Solved</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="row"><span id="score"></span></div>
+                                <div class="row">Score</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Content Section -->
-            <div class="col-md-8">
-                <!-- Progress Section -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Progress</h5>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="text-center">
-                                    <div class="progress" style="height: 20px;">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 15%"
-                                            aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">15%</div>
-                                    </div>
-                                    <small class="text-muted">A2Z</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="text-center">
-                                    <div class="progress" style="height: 20px;">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 5%"
-                                            aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">5%</div>
-                                    </div>
-                                    <small class="text-muted">SDE</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="text-center">
-                                    <div class="progress" style="height: 20px;">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 9%"
-                                            aria-valuenow="9" aria-valuemin="0" aria-valuemax="100">9%</div>
-                                    </div>
-                                    <small class="text-muted">79</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LeetCode Data Section -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">LeetCode Data</h5>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <p>Easy: 170/859</p>
-                                <p>Medium: 99/1799</p>
-                                <p>Hard: 9/802</p>
-                            </div>
-                            <div class="col-md-8 text-center">
-                                <h3>278</h3>
-                                <p class="text-muted">/3460</p>
-                            </div>
-                        </div>
-                        <p class="text-muted">poovarasan936161</p>
-                    </div>
-                </div>
-
-                <!-- Topics Covered Section -->
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Topics Covered (on takeUforward)</h5>
-                        <div class="row">
-                            <div class="col-md-3">Arrays x15</div>
-                            <div class="col-md-3">Linked List x15</div>
-                            <div class="col-md-3">Maths x11</div>
-                            <div class="col-md-3">Binary Tree x8</div>
-                            <div class="col-md-3">Recursion x7</div>
-                            <div class="col-md-3">Stack x5</div>
-                            <div class="col-md-3">Dynamic Programming x3</div>
-                            <div class="col-md-3">Queue x3</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
+        <pre id="profileInfo"></pre>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const fetchProfile = async () => {
+            const userName = document.getElementById("username").value;
+            if (!userName) {
+                alert("Please enter a username");
+                return;
+            }
+            try {
+                const response = await axios.get(
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(`https://authapi.geeksforgeeks.org/api-get/user-profile-info/?handle=${userName}`)}`
+                );
+                const data = JSON.parse(response.data.contents).data;
+
+                // Basic Information
+                document.getElementById("name").textContent = data.name;
+                // document.getElementById("usernameDisplay").textContent = `#${userName}`;
+                document.getElementById("profileImage").src = data.profile_image_url;
+                // document.getElementById("email").textContent = "poovarasan936161@gmail.com"; // Static for now
+                // document.getElementById("location").textContent = "Coimbatore"; // Static for now
+                document.getElementById("college").textContent = data.institute_name;
+                document.getElementById("rank").textContent = data.institute_rank;
+                
+                // Mock Progress Data (Replace with actual API data if available)
+                // document.getElementById("a2zProgress").textContent = "15%";
+                // document.getElementById("sdeProgress").textContent = "5%";
+                // document.getElementById("topicProgress").textContent = "9%";
+
+                // // Mock LeetCode Data (Replace with actual API data if available)
+                // document.getElementById("easySolved").textContent = "170";
+                // document.getElementById("easyTotal").textContent = "859";
+                // document.getElementById("mediumSolved").textContent = "99";
+                // document.getElementById("mediumTotal").textContent = "1799";
+                // document.getElementById("hardSolved").textContent = "9";
+                // document.getElementById("hardTotal").textContent = "802";
+                // document.getElementById("totalSolved").textContent = "278";
+                // document.getElementById("totalProblems").textContent = "3460";
+                // document.getElementById("leetcodeUsername").textContent = "poovarasan936161"; // Static for now
+
+                // Mock Topics Covered Data (Replace with actual API data if available)
+                // document.getElementById("arraysCount").textContent = "15";
+                // document.getElementById("linkedListCount").textContent = "15";
+                // document.getElementById("mathsCount").textContent = "11";
+                // document.getElementById("binaryTreeCount").textContent = "8";
+                // document.getElementById("recursionCount").textContent = "7";
+                // document.getElementById("stackCount").textContent = "5";
+                // document.getElementById("dynamicProgrammingCount").textContent = "3";
+                // document.getElementById("queueCount").textContent = "3";
+
+                console.log(JSON.stringify(data, null, 2));
+                document.getElementById("profileInfo").textContent = JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                document.getElementById("profileInfo").textContent = "Error fetching data: " + error.message;
+            }
+        };
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.9/holder.min.js"
+        integrity="sha512-q9q0j5KHvHLQnJ7S9wR6jQ+QOq7mR5Cst2R9KKJ7rtohYvkP/k09pQjZ8r/WZH5zM8Q3t3zE5sW0aXU8Q20w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 </html>
